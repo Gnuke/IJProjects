@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping("/member")
 public class MemController {
     @Autowired
@@ -47,33 +47,32 @@ public class MemController {
     }
 
     // login
-    @PostMapping("/login")
-    public Map login(@RequestBody MemDTO m) {
-        MemDTO myInfo = memService.myInfo(m.getId());
-        Map map = new HashMap();
-        boolean flag = true;
-
-        if(myInfo != null) {
-            if(passwordEncoder.matches(m.getPwd(), myInfo.getPwd())){
-                UsernamePasswordAuthenticationToken authtoken =
-                        new UsernamePasswordAuthenticationToken(m.getId(), m.getPwd());
-                Authentication auth =
-                        abuilder.getObject().authenticate(authtoken);
-                MemDTO authUserInfo = memService.myInfo(auth.getName());
-                String token = provider.getToken(myInfo);
-                map.put("token", token);
-                map.put("myInfo", authUserInfo);
-            }else{
-                // 비밀번호 불일치
-                flag = false;
-            }
-        }else{
-            map.put("myInfo", null);
-        }
-
-        map.put("flag", flag);
-        System.out.println( flag );
-        System.out.println( map );
-        return map;
-    }
+//    @PostMapping("/login")
+//    public Map login(@RequestBody MemDTO m) {
+//        MemDTO myInfo = memService.myInfo(m.getId());
+//        Map map = new HashMap();
+//        boolean flag = true;
+//
+//        if(myInfo != null) {
+//            if(passwordEncoder.matches(m.getPwd(), myInfo.getPwd())){
+//                UsernamePasswordAuthenticationToken authtoken =
+//                        new UsernamePasswordAuthenticationToken(m.getId(), m.getPwd());
+//                Authentication auth =
+//                        abuilder.getObject().authenticate(authtoken);
+//                MemDTO authUserInfo = memService.myInfo(auth.getName());
+//                String token = provider.getToken(myInfo);
+//                //System.out.println("login 했을 때 user : " + auth.getName());
+//                map.put("token", token);
+//            }else{
+//                // 비밀번호 불일치
+//                flag = false;
+//            }
+//        }else{
+//            map.put("myInfo", null);
+//        }
+//
+//        map.put("flag", flag);
+//
+//        return map;
+//    }
 }

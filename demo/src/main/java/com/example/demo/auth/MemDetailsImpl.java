@@ -2,6 +2,7 @@ package com.example.demo.auth;
 
 import com.example.demo.member.Member;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,13 +14,9 @@ import java.util.List;
 
 @Setter
 @Getter
+@RequiredArgsConstructor
 public class MemDetailsImpl implements UserDetails{
 	private final Member m;
-	
-	public MemDetailsImpl(Member m) {
-		// TODO Auto-generated constructor stub
-		this.m = m;
-	}
 	
 	// user의 권한 정보 설정
 	@Override

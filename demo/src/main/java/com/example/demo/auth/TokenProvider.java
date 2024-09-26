@@ -33,10 +33,10 @@ public class TokenProvider {
 	private final UserDetailsService service;
 	
 	// 토큰 생성하여 반환
-	public String getToken(MemDTO dto) {
-		return Jwts.builder().setSubject(dto.getId()) // 토큰의 제목
+	public String getToken(Authentication authentication) {
+		return Jwts.builder().setSubject(authentication.getName()) // 토큰의 제목
 				.setHeader(createHeader()) // 토큰의 헤더 정보 셋
-				.setClaims(createClaims(dto)) // 클레임 정보 셋
+				.setClaims(createClaims((MemDTO) authentication)) // 클레임 정보 셋
 				.setExpiration(new Date((new Date()).getTime() + expiredTime))
 				.signWith(key, SignatureAlgorithm.HS256).compact();
 	}

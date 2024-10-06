@@ -47,32 +47,22 @@ public class MemController {
     }
 
     // login
-//    @PostMapping("/login")
-//    public Map login(@RequestBody MemDTO m) {
-//        MemDTO myInfo = memService.myInfo(m.getId());
-//        Map map = new HashMap();
-//        boolean flag = true;
-//
-//        if(myInfo != null) {
-//            if(passwordEncoder.matches(m.getPwd(), myInfo.getPwd())){
-//                UsernamePasswordAuthenticationToken authtoken =
-//                        new UsernamePasswordAuthenticationToken(m.getId(), m.getPwd());
-//                Authentication auth =
-//                        abuilder.getObject().authenticate(authtoken);
-//                MemDTO authUserInfo = memService.myInfo(auth.getName());
-//                String token = provider.getToken(myInfo);
-//                //System.out.println("login 했을 때 user : " + auth.getName());
-//                map.put("token", token);
-//            }else{
-//                // 비밀번호 불일치
-//                flag = false;
-//            }
-//        }else{
-//            map.put("myInfo", null);
-//        }
-//
-//        map.put("flag", flag);
-//
-//        return map;
-//    }
+    @PostMapping("/login")
+    public Map login(@RequestBody MemDTO m) {
+        Authentication auth = abuilder.getObject().authenticate(
+                new UsernamePasswordAuthenticationToken(m.getId(), m.getPwd()));
+
+        Map map = new HashMap();
+        boolean flag = true;
+
+        if(auth.isAuthenticated()) {
+            String token = provider.getToken(auth);
+            map.put("token", token);
+        } else {
+            flag = false;
+        }
+
+        map.put("flag", flag);
+        return map;
+    }
 }

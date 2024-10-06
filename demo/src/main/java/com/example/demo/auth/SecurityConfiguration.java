@@ -38,12 +38,12 @@ public class SecurityConfiguration {
 	// 보안 관련 설정 메서드
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.formLogin(form -> form
+		http
 				.cors(Customizer.withDefaults())
+				.formLogin(form -> form
 				.loginProcessingUrl("/member/login")
 				.usernameParameter("id")
 				.passwordParameter("pwd")
-				//
 				.successHandler((request, response, authentication) -> {
 					String token = provider.getToken(authentication);
 					System.out.println("S/token : " + token);

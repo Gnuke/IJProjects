@@ -1,6 +1,7 @@
 package com.example.demo.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,10 @@ public class MemService {
     }
 
     //내정보
-    public MemDTO myInfo(String id){
+    public Authentication myInfo(String id){
         Member entity = dao.findById(id).orElse(null);
         if(entity != null){
-            return new MemDTO(entity.getId(), entity.getPwd(), entity.getName(), entity.getEmail());
+            return (Authentication) new MemDTO(entity.getId(), entity.getPwd(), entity.getName(), entity.getEmail());
         }
         return null;
     }

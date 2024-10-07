@@ -49,19 +49,18 @@ public class MemController {
     // login
     @PostMapping("/login")
     public Map login(@RequestBody MemDTO m) {
-        Authentication auth = abuilder.getObject().authenticate(
-                new UsernamePasswordAuthenticationToken(m.getId(), m.getPwd()));
+        UsernamePasswordAuthenticationToken authtoken =
+                new UsernamePasswordAuthenticationToken(m.getId(), m.getPwd());
+        Authentication auth =
+                abuilder.getObject().authenticate(authtoken);
 
+        boolean flag = auth.isAuthenticated(); //인증 결과
+        System.out.println( "인증 결과 : " + flag );
         Map map = new HashMap();
-        boolean flag = true;
-
-        if(auth.isAuthenticated()) {
-            String token = provider.getToken(auth);
+        if(flag) {// 정상 인증
+            String token = provider.getToken(memService.myInfo( m.getId() ));
             map.put("token", token);
-        } else {
-            flag = false;
         }
-
         map.put("flag", flag);
         return map;
     }

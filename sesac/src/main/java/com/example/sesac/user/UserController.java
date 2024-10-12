@@ -47,8 +47,6 @@ public class UserController {
             flag = false;
         }
 
-        System.out.println("memberInfo E : " + memberInfo.getEmail());
-
         map.put("flag", flag);
 
         return map;

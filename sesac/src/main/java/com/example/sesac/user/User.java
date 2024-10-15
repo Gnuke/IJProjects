@@ -3,6 +3,7 @@ package com.example.sesac.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -28,14 +29,13 @@ public class User {
     private String email;
 
     @Column(name="joinDate", nullable=false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date joinDate;
+    private LocalDateTime joinDate = LocalDateTime.now();
 
     @Column(name="role", nullable=false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(String uid, String pwd, String email, Date joinDate, Role role) {
+    public User(String uid, String pwd, String email, LocalDateTime joinDate, Role role) {
         this.uid = uid;
         this.pwd = pwd;
         this.email = email;

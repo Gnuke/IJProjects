@@ -1,10 +1,7 @@
 package com.example.sesac.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -51,4 +48,23 @@ public class UserController {
 
         return map;
     }
+
+    // 탈퇴 시 비밀번호 확인 후 삭제
+    @PostMapping("/check-password")
+    public Map checkPassword(@RequestBody Map<String, String> req) {
+        Map map = new HashMap();
+        boolean flag = true;
+
+        String check = req.get("check");
+        String uid = req.get("uid");
+
+        boolean isDeleted = service.pwdCheckAndDelete(uid, check);
+
+        map.put("flag", isDeleted);
+
+        System.out.println(map);
+
+        return map;
+    }
+
 }

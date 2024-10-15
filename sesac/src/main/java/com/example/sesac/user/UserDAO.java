@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface UserDAO extends JpaRepository<User, Long> {
     User findByUid(String uid);
 
-    User deleteByUid(String uid);
+    void deleteByUid(String uid);
 }

@@ -2,10 +2,12 @@ package com.example.sesac.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,19 +30,20 @@ public class User {
     @Column(name="email", nullable=false)
     private String email;
 
-    @Column(name="joinDate", nullable=false)
-    private LocalDateTime joinDate = LocalDateTime.now();
+    @CreationTimestamp
+    @Column(name="joinDate", updatable=false)
+    private LocalDateTime joinDate;
 
     @Column(name="role", nullable=false)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Set<Role> roles;
 
-    public User(String uid, String pwd, String email, LocalDateTime joinDate, Role role) {
+    public User(String uid, String pwd, String email, LocalDateTime joinDate, Set<Role> roles) {
         this.uid = uid;
         this.pwd = pwd;
         this.email = email;
         this.joinDate = joinDate;
-        this.role = role;
+        this.roles = roles;
     }
-
 }

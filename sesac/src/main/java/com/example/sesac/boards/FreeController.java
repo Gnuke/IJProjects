@@ -3,16 +3,14 @@ package com.example.sesac.boards;
 import com.example.sesac.user.User;
 import com.example.sesac.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/api/board")
 public class FreeController {
     @Autowired
     private FreeService service;
@@ -30,4 +28,16 @@ public class FreeController {
 //        System.out.println(dto.getUid());
 //        return null;
 //    } token 생성하고 그 값을 넘겨서 token 쪽에서 User 타입으로 변경해 주기
+
+    //list
+    @GetMapping("/freeboard")
+    public List<FreeDTO> getAllFreeBoard() {
+//        List<FreeDTO> freeBoardList = service.getAll();
+
+//        if (freeBoardList.isEmpty()) {
+//            return ResponseEntity.ok().body(Collections.emptyList());  // 빈 리스트 반환
+//        }
+//        return ResponseEntity.ok().body(freeBoardList);
+        return service.getAll();
+    }
 }

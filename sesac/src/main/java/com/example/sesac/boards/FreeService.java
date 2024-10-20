@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FreeService {
@@ -44,12 +45,17 @@ public class FreeService {
     //전체 목록 조회
     public List<FreeDTO> getAll(){
         List<Free> l = dao.findAll();
-        List<FreeDTO> dtos = new ArrayList<>();
+//        List<FreeDTO> dtos = new ArrayList<>();
+//
+//        for(Free f : l){
+//            dtos.add(new FreeDTO(f.getNum(), f.getUid(), f.getTitle(), f.getContent(), f.getWDate()));
+//        }
+//
+//        return dtos;
 
-        for(Free f : l){
-            dtos.add(new FreeDTO(f.getNum(), f.getUid(), f.getTitle(), f.getContent(), f.getWDate()));
-        }
-
-        return dtos;
+        // 엔티티 -> DTO로 변환
+        return l.stream()
+                .map(free -> new FreeDTO(free.getNum(), free.getUid(), free.getTitle(), free.getContent(), free.getWDate()))
+                .collect(Collectors.toList());
     }
 }

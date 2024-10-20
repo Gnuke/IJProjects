@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 public class FreeDTO {
-    private int id;
+    private int num;
     private User uid;
     private String title;
     private String content;

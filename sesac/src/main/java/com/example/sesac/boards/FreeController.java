@@ -77,13 +77,11 @@ public class FreeController {
     @PutMapping("/edit/{num}")
     public Map updateBoard(@PathVariable int num, @RequestBody Map<String, String> req) {
         Map map = new HashMap();
-//        System.out.println("입력된 비밀번호 : " + req.get("check"));
-//        System.out.println("수정 내용 : " + req.get("content"));
-//        System.out.println("수정 제목 : " + req.get("title"));
+
         boolean isUpdatedBoard = service.updateBoard(num, req);
 
+        map.put("flag", isUpdatedBoard);
 
-
-        return null;
+        return map;
     }
 }

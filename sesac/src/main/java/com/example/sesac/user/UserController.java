@@ -88,9 +88,9 @@ public class UserController {
     @GetMapping("/myInfo")
     public Map myInfo() {
         Map map = new HashMap<>();
-        Long id = SecurityUtil.getCurrentUserId();
+        String uid = SecurityUtil.getCurrentUserId();
 
-        UserDTO dto = service.getUser(id);
+        UserDTO dto = service.getUser(uid);
         map.put("dto", dto);
 
 

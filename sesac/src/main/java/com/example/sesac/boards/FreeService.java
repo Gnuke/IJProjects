@@ -1,9 +1,13 @@
 package com.example.sesac.boards;
 
+import com.example.sesac.auth.SecurityUtil;
 import com.example.sesac.user.User;
+import com.example.sesac.user.UserDAO;
 import com.example.sesac.user.UserDTO;
 import com.example.sesac.user.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,44 +22,78 @@ public class FreeService {
     private FreeDAO dao;
 
     @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //게시글 생성
-//    public void save(Map<String, String> req){
-//        String uid = req.get("uid");
-//        String title = req.get("title");
-//        String content = req.get("content");
-//
-//        UserDTO user = userService.getUser(uid);
-//
-//        FreeDTO dto = new FreeDTO();
-//        dto.setUid(user);
-//        dto.setWDate(LocalDateTime.now());
-//        dto.setTitle(title);
-//        dto.setContent(content);
-//
-//        try {
-//            dao.save(new Free(dto.getUid(), dto.getTitle(), dto.getContent(), dto.getWDate()));
-//        }catch (Exception e){
-//            System.out.println("service에서 에러 : " + e);
-//        }
-//    }
+    public void save(FreeDTO dto) {
+        dao.save( new Free(dto.getUdtos(), dto.getTitle(), dto.getContent()));
+    }
     //write json 형식으로 보내는데 이 때 User 타입으로 반환이 안됨 처리 어떻게 해야할 지 모르겠음
 
     //전체 목록 조회
     public List<FreeDTO> getAll(){
         List<Free> l = dao.findAll();
-//        List<FreeDTO> dtos = new ArrayList<>();
-//
-//        for(Free f : l){
-//            dtos.add(new FreeDTO(f.getNum(), f.getUid(), f.getTitle(), f.getContent(), f.getWDate()));
-//        }
-//
-//        return dtos;
 
         // 엔티티 -> DTO로 변환
         return l.stream()
                 .map(free -> new FreeDTO(free.getNum(), free.getUid(), free.getTitle(), free.getContent(), free.getWDate()))
                 .collect(Collectors.toList());
+    }
+
+    //Detail
+    public FreeDTO detail(int num) {
+        Free entity = dao.findById(num).orElse(null);
+        if(entity != null){
+            return new FreeDTO(entity.getNum(), entity.getUid(), entity.getTitle(), entity.getContent(), entity.getWDate());
+        }
+        return null;
+    }
+
+    // 비밀번호 확인 후 삭제
+    @Transactional
+    public boolean deleteBoard(int num, String check) {
+        String uid = SecurityUtil.getCurrentUserId();
+
+        User user = userDAO.findByUid(uid)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if(passwordEncoder.matches(check, user.getPwd())){
+            dao.deleteById(num);
+            return true;
+        }
+
+        return false;
+    }
+
+    //비밀번호 확인 후 수정
+    @Transactional
+    public boolean updateBoard(int num, Map<String, String> req) {
+        System.out.println("보드번호 : " + num);
+        System.out.println(req.toString());
+
+        String uid = SecurityUtil.getCurrentUserId();
+
+        User user = userDAO.findByUid(uid)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String check = req.get("check");
+        String title = req.get("title");
+        String content = req.get("content");
+
+        if(passwordEncoder.matches(check, user.getPwd())){
+            dao.findById(num).ifPresent(entity -> {
+                entity.setTitle(title);
+                entity.setContent(content);
+
+                dao.save(entity);
+            });
+            return true;
+        }
+        return false;
     }
 }

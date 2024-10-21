@@ -1,6 +1,7 @@
 package com.example.sesac.boards;
 
 import com.example.sesac.user.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -15,14 +16,10 @@ import java.util.Date;
 @ToString
 public class FreeDTO {
     private int num;
-    private User uid;
+    private User udtos;
     private String title;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
     private LocalDateTime wDate;
 
-    @JsonProperty("wDate")
-    public String getFormattedWDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        return wDate.format(formatter);
-    }
 }

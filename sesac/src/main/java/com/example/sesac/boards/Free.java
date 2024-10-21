@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -22,8 +24,9 @@ public class Free {
     @Column(name="num")
     private int num;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="uid")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name="uid", nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User uid;
 
     @Column(name="title", nullable=false)
@@ -32,14 +35,12 @@ public class Free {
     @Column(name="content", nullable=false)
     private String content;
 
-    @Column(name="wDate", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="wDate", updatable=false)
     private LocalDateTime wDate = LocalDateTime.now();
 
-    public Free(User uid, String title, String content, LocalDateTime wDate) {
+    public Free(User uid, String title, String content) {
         this.uid = uid;
         this.title = title;
         this.content = content;
-        this.wDate = wDate;
     }
 }

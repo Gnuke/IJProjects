@@ -15,5 +15,5 @@ public class SecurityUtil {
         }
     }
 
-    public static Long getCurrentUserId() { return getCurrentUserDetails().getId(); }
+    public static String getCurrentUserId() { return getCurrentUserDetails().getUid(); }
 }

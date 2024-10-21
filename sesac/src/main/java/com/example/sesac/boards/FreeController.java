@@ -1,12 +1,14 @@
 package com.example.sesac.boards;
 
+import com.example.sesac.auth.SecurityUtil;
 import com.example.sesac.user.User;
 import com.example.sesac.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -19,25 +21,69 @@ public class FreeController {
     private UserService userService;
 
     //write
-//    @PostMapping("/freeboard/write")
-//    public Map<String, Object> write(@RequestBody FreeDTO dto ) {
-//        String uid = dto.getUid(); // uid가 String 타입일 경우
-//        User user = userService.getUser(uid); // uid를 이용해 User 객체를 가져오는 로직
-//        dto.setUid(user);
-//
-//        System.out.println(dto.getUid());
-//        return null;
-//    } token 생성하고 그 값을 넘겨서 token 쪽에서 User 타입으로 변경해 주기
+    @PostMapping("/write")
+    public Map write(@RequestBody FreeDTO dto ) {
+
+        Map map = new HashMap();
+        String uid = SecurityUtil.getCurrentUserId();
+        boolean flag = false;
+
+        User user = userService.getUserEntityByUid(uid);
+
+        dto.setUdtos(user);
+
+        try {
+            service.save(dto);
+            flag = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        map.put("flag", flag);
+
+        return map;
+    }
 
     //list
     @GetMapping("/freeboard")
     public List<FreeDTO> getAllFreeBoard() {
-//        List<FreeDTO> freeBoardList = service.getAll();
-
-//        if (freeBoardList.isEmpty()) {
-//            return ResponseEntity.ok().body(Collections.emptyList());  // 빈 리스트 반환
-//        }
-//        return ResponseEntity.ok().body(freeBoardList);
         return service.getAll();
+    }
+
+    //detail
+    @GetMapping("/{num}")
+    public Map getFreeBoard(@PathVariable int num) {
+        Map map = new HashMap();
+        FreeDTO dto = service.detail(num);
+        map.put("dto", dto);
+
+        return map;
+    }
+
+    //delete
+    @DeleteMapping("/delete/{num}")
+    public Map deleteBoard(@PathVariable int num, @RequestBody Map<String, String> req) {
+        Map map = new HashMap();
+        String check = req.get("check");
+
+        boolean isDeletedBoard = service.deleteBoard(num, check);
+
+        map.put("flag", isDeletedBoard);
+
+        return map;
+    }
+
+    //edit
+    @PutMapping("/edit/{num}")
+    public Map updateBoard(@PathVariable int num, @RequestBody Map<String, String> req) {
+        Map map = new HashMap();
+//        System.out.println("입력된 비밀번호 : " + req.get("check"));
+//        System.out.println("수정 내용 : " + req.get("content"));
+//        System.out.println("수정 제목 : " + req.get("title"));
+        boolean isUpdatedBoard = service.updateBoard(num, req);
+
+
+
+        return null;
     }
 }

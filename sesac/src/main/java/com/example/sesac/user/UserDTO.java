@@ -26,10 +26,4 @@ public class UserDTO {
         this.email = email;
         this.joinDate = joinDate;
     }
-
-//    @JsonProperty("joinDate")
-//    public String getFormattedJoinDate() {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
-//        return joinDate.format(formatter);
-//    }
 }

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FreeDAO extends JpaRepository<Free, Integer> {
-    Free findByTitle(String title);
+
 }

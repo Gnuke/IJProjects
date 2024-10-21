@@ -26,8 +26,8 @@ public class UserService {
     }
 
     //내 정보 조회
-    public UserDTO getUser(Long id){
-        User entity =dao.findById(id)
+    public UserDTO getUser(String uid){
+        User entity =dao.findByUid(uid)
                         .orElseThrow(()->new RuntimeException("User not found"));
         if(entity != null){
             return new UserDTO( entity.getUid(), entity.getEmail(), entity.getJoinDate() );
@@ -38,18 +38,24 @@ public class UserService {
     // 비밀번호 확인 후 삭제
     @Transactional
     public boolean pwdCheckAndDelete(String check){
-        Long id = SecurityUtil.getCurrentUserId();
+        String uid = SecurityUtil.getCurrentUserId();
 
-        User user = dao.findById(id)
+        User user = dao.findByUid(uid)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // 비밀번호 일치 여부 확인
         if (passwordEncoder.matches(check, user.getPwd())) {
-            System.out.println("비밀번호가 일치합니다. 사용자 삭제.");
-            dao.deleteById(id);  // 비밀번호가 맞으면 사용자 삭제
+            //System.out.println("비밀번호가 일치합니다. 사용자 삭제.");
+            dao.deleteByUid(uid);  // 비밀번호가 맞으면 사용자 삭제
             return true;
         }
 
         return false;
+    }
+
+    //UserEntity 반환용 메서드
+    public User getUserEntityByUid(String uid){
+        return dao.findByUid(uid)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

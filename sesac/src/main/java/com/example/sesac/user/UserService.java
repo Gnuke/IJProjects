@@ -45,8 +45,7 @@ public class UserService {
 
         // 비밀번호 일치 여부 확인
         if (passwordEncoder.matches(check, user.getPwd())) {
-            //System.out.println("비밀번호가 일치합니다. 사용자 삭제.");
-            dao.deleteByUid(uid);  // 비밀번호가 맞으면 사용자 삭제
+            dao.deleteByUid(uid);
             return true;
         }
 

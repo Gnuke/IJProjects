@@ -7,6 +7,7 @@ import com.example.sesac.user.UserDTO;
 import com.example.sesac.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,8 @@ public class FreeService {
 
     //전체 목록 조회
     public List<FreeDTO> getAll(){
-        List<Free> l = dao.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "num");
+        List<Free> l = dao.findAll(sort);
 
         // 엔티티 -> DTO로 변환
         return l.stream()
@@ -73,9 +75,6 @@ public class FreeService {
     //비밀번호 확인 후 수정
     @Transactional
     public boolean updateBoard(int num, Map<String, String> req) {
-        System.out.println("보드번호 : " + num);
-        System.out.println(req.toString());
-
         String uid = SecurityUtil.getCurrentUserId();
 
         User user = userDAO.findByUid(uid)

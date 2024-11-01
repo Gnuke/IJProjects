@@ -93,9 +93,11 @@ public class UserController {
         UserDTO dto = service.getUser(uid);
         map.put("dto", dto);
 
-
-        System.out.println("값 : " + dto);
-
         return map;
+    }
+
+    @PostMapping("/login/google")
+    public Map loginGoogle(@RequestBody UserDTO dto) {
+        return null;
     }
 }

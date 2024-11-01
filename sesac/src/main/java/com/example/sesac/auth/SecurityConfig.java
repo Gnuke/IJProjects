@@ -48,7 +48,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()  // CORS 활성화
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/member/**").permitAll()
+                        .requestMatchers("/api/member/**","/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

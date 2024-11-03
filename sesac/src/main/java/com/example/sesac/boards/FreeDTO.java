@@ -16,7 +16,7 @@ import java.util.Date;
 @ToString
 public class FreeDTO {
     private int num;
-    private User udtos;
+    private String uid;
     private String title;
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")

@@ -33,9 +33,7 @@ public class FreeController {
         String uid = SecurityUtil.getCurrentUserId();
         boolean flag = false;
 
-        User user = userService.getUserEntityByUid(uid);
-
-        dto.setUdtos(user);
+        dto.setUid(uid);
 
         try {
             service.save(dto);

@@ -32,26 +32,27 @@ public class FreeService {
 
     //게시글 생성
     public void save(FreeDTO dto) {
-        dao.save( new Free(dto.getUdtos(), dto.getTitle(), dto.getContent()));
+        User user = userService.getUserEntityByUid(dto.getUid());
+        dao.save( new Free(user, dto.getTitle(), dto.getContent()));
     }
     //write json 형식으로 보내는데 이 때 User 타입으로 반환이 안됨 처리 어떻게 해야할 지 모르겠음
 
     //전체 목록 조회
-    public List<FreeDTO> getAll(){
-        Sort sort = Sort.by(Sort.Direction.DESC, "num");
-        List<Free> l = dao.findAll(sort);
-
-        // 엔티티 -> DTO로 변환
-        return l.stream()
-                .map(free -> new FreeDTO(free.getNum(), free.getUid(), free.getTitle(), free.getContent(), free.getWDate()))
-                .collect(Collectors.toList());
-    }
+//    public List<FreeDTO> getAll(){
+//        Sort sort = Sort.by(Sort.Direction.DESC, "num");
+//        List<Free> l = dao.findAll(sort);
+//
+//        // 엔티티 -> DTO로 변환
+//        return l.stream()
+//                .map(free -> new FreeDTO(free.getNum(), free.getUid(), free.getTitle(), free.getContent(), free.getWDate()))
+//                .collect(Collectors.toList());
+//    }
 
     //Detail
     public FreeDTO detail(int num) {
         Free entity = dao.findById(num).orElse(null);
         if(entity != null){
-            return new FreeDTO(entity.getNum(), entity.getUid(), entity.getTitle(), entity.getContent(), entity.getWDate());
+            return new FreeDTO(entity.getNum(), entity.getUser().getUid(), entity.getTitle(), entity.getContent(), entity.getWDate());
         }
         return null;
     }

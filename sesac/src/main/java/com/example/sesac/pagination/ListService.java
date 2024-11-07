@@ -20,7 +20,7 @@ public class ListService {
 
         return freeList.map(free -> new FreeDTO(
                 free.getNum(),
-                free.getUid(),
+                free.getUser().getUid(),
                 free.getTitle(),
                 free.getContent(),
                 free.getWDate()

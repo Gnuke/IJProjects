@@ -1,7 +1,7 @@
 package com.example.sesac.pagination;
 
-import com.example.sesac.auth.SecurityUtil;
 import com.example.sesac.boards.FreeDTO;
+import com.example.sesac.boards.FreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +17,10 @@ import java.util.Map;
 public class PaginationController {
 
     @Autowired
-    public ListService paginationService;
+    public PaginationService paginationService;
+
     @Autowired
-    private WriteService writeService;
+    private FreeService freeService;
 
     @GetMapping("/{boardId}")
     @ResponseBody
@@ -33,32 +34,20 @@ public class PaginationController {
         };
     }
 
-    @PostMapping("/{boardId}/write")
-    public Map write(@PathVariable String boardId, @RequestBody Map<String, String> req){
+    @GetMapping("/{boardId}/{num}")
+    public Map<String, Integer> getBoardDetail(@PathVariable String boardId, @PathVariable int num) {
+        Map map = new HashMap();
 
-        Map<String, Object> res = new HashMap<>();
-        boolean flag = false;
-
-        String userId = req.get("userId");
-        String uid = SecurityUtil.getCurrentUserId();
-
-        if( userId.equals(uid) ) {
-            switch (boardId) {
-                case "freeboard" -> {
-                    FreeDTO freeDTO = new FreeDTO();
-                    freeDTO.setUid(userId);
-                    freeDTO.setTitle(req.get("title"));
-                    freeDTO.setContent(req.get("content"));
-
-                    writeService.saveFreeBoard(freeDTO);
-                    flag = true;
-                }
-                default -> throw new IllegalArgumentException("유효하지 않은 boardId입니다: " + boardId);
+        return switch (boardId) {
+            case "freeboard" -> {
+                // freeboard detail code
+                FreeDTO freeDto = freeService.detail(num);
+                map.put("dto", freeDto);
+                yield map;
             }
-        }
-        res.put("flag", flag);
-
-        return res;
+            default -> {
+                throw new IllegalArgumentException("유효하지 않은 boardId입니다: " + boardId);
+            }
+        };
     }
-
 }

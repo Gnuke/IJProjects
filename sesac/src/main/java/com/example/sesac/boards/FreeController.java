@@ -1,12 +1,18 @@
 package com.example.sesac.boards;
 
 import com.example.sesac.auth.SecurityUtil;
+import com.example.sesac.pagination.PaginationService;
 import com.example.sesac.user.User;
 import com.example.sesac.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,9 +33,7 @@ public class FreeController {
         String uid = SecurityUtil.getCurrentUserId();
         boolean flag = false;
 
-        User build = User.builder().uid(uid).build();
-
-        dto.setUid(build.getUid());
+        dto.setUid(uid);
 
         try {
             service.save(dto);
@@ -42,6 +46,12 @@ public class FreeController {
 
         return map;
     }
+
+    //list
+//    @GetMapping("/freeboard")
+//    public List<FreeDTO> getAllFreeBoard() {
+//        return service.getAll();
+//    }
 
     //detail
     @GetMapping("/{num}")

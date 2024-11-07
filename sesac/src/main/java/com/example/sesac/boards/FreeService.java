@@ -27,32 +27,32 @@ public class FreeService {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    //게시글 생성
     public void save(FreeDTO dto) {
-        try {
-            UserDTO userDTO = userService.getUser(dto.getUid());
-            // dto에서 uid를 사용하여 User 엔티티 조회
-            User user = new User( userDTO.getUid(), null, null, null, null );
-
-            // 조회된 User 엔티티와 dto의 제목, 내용으로 Free 엔티티 생성
-            Free free = new Free(user, dto.getTitle(), dto.getContent());
-
-            // dao를 통해 free 엔티티 저장
-            dao.save(free);
-        } catch (Exception e) {
-            throw new RuntimeException("Error saving Free entity", e);
-        }
+        User user = userService.getUserEntityByUid(dto.getUid());
+        dao.save( new Free(user, dto.getTitle(), dto.getContent()));
     }
+    //write json 형식으로 보내는데 이 때 User 타입으로 반환이 안됨 처리 어떻게 해야할 지 모르겠음
 
+    //전체 목록 조회
+//    public List<FreeDTO> getAll(){
+//        Sort sort = Sort.by(Sort.Direction.DESC, "num");
+//        List<Free> l = dao.findAll(sort);
+//
+//        // 엔티티 -> DTO로 변환
+//        return l.stream()
+//                .map(free -> new FreeDTO(free.getNum(), free.getUid(), free.getTitle(), free.getContent(), free.getWDate()))
+//                .collect(Collectors.toList());
+//    }
 
     //Detail
     public FreeDTO detail(int num) {
         Free entity = dao.findById(num).orElse(null);
         if(entity != null){
-            return new FreeDTO(entity.getNum(), entity.getUid(), entity.getTitle(), entity.getContent(), entity.getWDate());
+            return new FreeDTO(entity.getNum(), entity.getUser().getUid(), entity.getTitle(), entity.getContent(), entity.getWDate());
         }
         return null;
     }

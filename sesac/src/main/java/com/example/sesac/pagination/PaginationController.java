@@ -17,7 +17,7 @@ import java.util.Map;
 public class PaginationController {
 
     @Autowired
-    public PaginationService paginationService;
+    public ListService paginationService;
 
     @Autowired
     private FreeService freeService;

@@ -1,7 +1,7 @@
 package com.example.sesac.boards;
 
 import com.example.sesac.auth.SecurityUtil;
-import com.example.sesac.pagination.PaginationService;
+import com.example.sesac.pagination.ListService;
 import com.example.sesac.user.User;
 import com.example.sesac.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

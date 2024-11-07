@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PaginationService {
+public class ListService {
     private final FreeDAO freeDAO; // 필요에 따라 repository 추가
 
-    public PaginationService(FreeDAO freeDAO) { // 필요에 따라 dao 변수 추가
+    public ListService(FreeDAO freeDAO) { // 필요에 따라 dao 변수 추가
         this.freeDAO = freeDAO;
     }
 
@@ -26,4 +26,6 @@ public class PaginationService {
                 free.getWDate()
         ));
     }
+
+
 }
